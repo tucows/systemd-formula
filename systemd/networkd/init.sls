@@ -1,13 +1,23 @@
-{%- from "systemd/networkd/map.jinja" import networkd with context -%}
-{% from "systemd/macros.jinja" import files_switch with context -%}
+{%- from "systemd/map.jinja" import systemd with context -%}
+{%- from "systemd/libtofs.jinja" import files_switch with context -%}
+
+{%- set networkd = systemd.get('networkd', {}) %}
 
 networkd:
+  {% if networkd.pkg %}
+  pkg.installed:
+    - name: {{ networkd.pkg }}
+  {% endif %}
   file.recurse:
     - name: {{ networkd.path }}
     - user: root
     - group: root
     - template: jinja
-    - source: {{ files_switch('systemd:networkd', ['/network']) }}
+    - source: {{ files_switch(['network'],
+                              lookup='networkd',
+                              v1_path_prefix = '/networkd'
+                 )
+              }}
     - clean: True
     - dir_mode: 755
     - file_mode: 644

@@ -1,9 +1,25 @@
+stages:
+  - test
+
 sudo: required
+cache: bundler
+language: ruby
+
 services:
   - docker
 
 install:
-  - export BUNDLE_GEMFILE=$PWD/Gemfile
   - bundle install
 
-script: bundle exec kitchen verify ${INSTANCE}
+env:
+  matrix:
+    - INSTANCE: debian-9
+    - INSTANCE: debian-8
+    - INSTANCE: ubuntu-1804
+    - INSTANCE: ubuntu-1604
+    - INSTANCE: centos-7
+    - INSTANCE: fedora
+    - INSTANCE: opensuse-42
+
+script:
+  - bundle exec kitchen verify ${INSTANCE}

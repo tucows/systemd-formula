@@ -4,3 +4,38 @@ systemd:
   pkg: systemd
   pkgs_libs: []
   pkgs_extra: []
+
+
+  timesyncd:
+    pkg: {}
+    timezone: 'UTC'
+    config:
+      NTP: ''
+      FallbackNTP: 0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org
+      RootDistanceMaxSec: 5
+      PollIntervalMinSec: 32
+      PollIntervalMaxSec: 2048
+
+  networkd:
+    pkg: {}
+    path: /etc/systemd/network
+    service: systemd-networkd
+    wait_online: True
+
+  resolved:
+    pkg: {}
+    resolv_file: /etc/resolv.conf
+    resolv_target: /usr/lib/systemd/resolv.conf
+    config:
+      DNS: ''
+      FallbackDNS: 8.8.8.8 8.8.4.4 2001:4860:4860::8888 2001:4860:4860::8844
+      Domains: ''
+      LLMNR: 'no'
+      MulticastDNS: 'no'
+      DNSSEC: 'allow-downgrade'
+      DNSOverTLS: 'off'
+      Cache: 'yes'
+      DNSStubListener: 'yes'
+      ReadEtcHosts: 'yes'
+
+
